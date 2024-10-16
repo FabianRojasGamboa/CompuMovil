@@ -27,11 +27,14 @@ class _DownMenuState extends State<DownMenu> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(titulos[
-            selectedIndex]), // Cambia el título según el índice seleccionado
+        title: Text(
+          titulos[selectedIndex],
+        ), // Cambia el título según el índice seleccionado
         centerTitle: true,
-        backgroundColor:
-            Colors.cyan, // Personaliza el color de la AppBar si lo deseas
+        backgroundColor: Colors.cyan,
+        titleTextStyle: const TextStyle(
+            color:
+                Colors.white), // Personaliza el color de la AppBar si lo deseas
       ),
       body: IndexedStack(
         index: selectedIndex,
@@ -45,25 +48,25 @@ class _DownMenuState extends State<DownMenu> {
             selectedIndex = value;
           });
         },
-        items: const [
+        items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            activeIcon: Icon(Icons.home_filled),
+            icon: const Icon(Icons.home),
+            activeIcon: const Icon(Icons.home_filled),
             label: 'Inicio',
             backgroundColor:
-                Colors.cyan, // Puedes ajustar los colores si es necesario
+                Colors.cyan[300], // Puedes ajustar los colores si es necesario
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.message),
-            activeIcon: Icon(Icons.message_rounded),
+            icon: const Icon(Icons.message),
+            activeIcon: const Icon(Icons.message_rounded),
             label: 'Crear Tickets',
-            backgroundColor: Colors.cyan,
+            backgroundColor: Colors.cyan[300],
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.list),
-            activeIcon: Icon(Icons.list_rounded),
+            icon: const Icon(Icons.list),
+            activeIcon: const Icon(Icons.list_rounded),
             label: 'Lista de Tickets',
-            backgroundColor: Colors.cyan,
+            backgroundColor: Colors.cyan[300],
           ),
         ],
       ),
