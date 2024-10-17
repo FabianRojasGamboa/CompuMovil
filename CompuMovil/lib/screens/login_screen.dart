@@ -13,7 +13,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: BarraApp(titulo: 'Pagina de Login'),
+      appBar: const BarraApp(titulo: 'Pagina de Login'),
       body: Center(
         child: Padding(
             padding: const EdgeInsets.all(100),

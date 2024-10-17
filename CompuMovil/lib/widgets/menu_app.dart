@@ -3,7 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:proyecto/screens/create_tickets.dart';
 import 'package:proyecto/screens/home_screen.dart';
 import 'package:proyecto/screens/login_screen.dart';
-import 'package:proyecto/screens/view_list.dart';
+import 'package:proyecto/screens/tickets_view_list.dart';
 import 'package:proyecto/services/storage_service.dart';
 
 class MenuApp extends StatelessWidget {
@@ -100,7 +100,7 @@ class MenuApp extends StatelessWidget {
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const ViewList()));
+                            builder: (context) => TicketsViewList()));
                   },
                 ),
               ],
@@ -118,4 +118,8 @@ class MenuApp extends StatelessWidget {
       ),
     );
   }
+}
+
+class ViewList {
+  const ViewList();
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto/screens/create_tickets.dart';
 import 'package:proyecto/screens/home_screen.dart';
-import 'package:proyecto/screens/view_list.dart';
+import 'package:proyecto/screens/tickets_view_list.dart';
 
 class DownMenu extends StatefulWidget {
   const DownMenu({super.key});
@@ -19,7 +19,7 @@ class _DownMenuState extends State<DownMenu> {
     final screens = [
       const HomeScreen(),
       const CreateTickets(),
-      const ViewList()
+      TicketsViewList()
     ];
 
     // Lista de títulos correspondientes
