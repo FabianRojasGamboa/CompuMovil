@@ -5,10 +5,6 @@ class TicketsViewList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text("Lista de Tickets"),
-      ],
-    );
+    return Container();
   }
 }

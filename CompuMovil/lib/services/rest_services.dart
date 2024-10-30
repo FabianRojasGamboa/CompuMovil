@@ -29,7 +29,10 @@ class RestService {
     if (idToken.isNotEmpty) {
       const String url = "$_baseUrl/v1/info/categories";
 
-      Map<String, String> headers = {'accept': _mime, 'Authorization': idToken};
+      Map<String, String> headers = {
+        'accept': _mime,
+        'Authorization': 'Bearer $idToken'
+      };
       Response<String> response =
           await _client.get(url, options: Options(headers: headers));
       final int httpCode = response.statusCode ?? 400;
@@ -78,7 +81,10 @@ class RestService {
     if (idToken.isNotEmpty) {
       const String url = "$_baseUrl/v1/info/types";
 
-      Map<String, String> headers = {'accept': _mime, 'Authorization': idToken};
+      Map<String, String> headers = {
+        'accept': _mime,
+        'Authorization': 'Bearer $idToken'
+      };
       Response<String> response =
           await _client.get(url, options: Options(headers: headers));
       final int httpCode = response.statusCode ?? 400;
@@ -121,7 +127,10 @@ class RestService {
       const String url =
           "$_baseUrl/v1/info/status"; // Cambia la URL a /v1/info/status
 
-      Map<String, String> headers = {'accept': _mime, 'Authorization': idToken};
+      Map<String, String> headers = {
+        'accept': _mime,
+        'Authorization': 'Bearer $idToken'
+      };
       Response<String> response =
           await _client.get(url, options: Options(headers: headers));
       final int httpCode = response.statusCode ?? 400;

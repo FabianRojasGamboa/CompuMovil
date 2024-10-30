@@ -100,7 +100,7 @@ class MenuApp extends StatelessWidget {
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => TicketsViewList()));
+                            builder: (context) => const TicketsViewList()));
                   },
                 ),
               ],

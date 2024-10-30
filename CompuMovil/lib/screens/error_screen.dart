@@ -10,12 +10,12 @@ class ErrorScreen extends StatelessWidget {
       appBar: BarraApp(titulo: 'Error'),
       body: Center(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Icon(Icons.error, size: 100, color: Colors.red),
             Text('Ha ocurrido un problema y no se puede procesar su solicitud',
                 style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold)),
           ],
-          crossAxisAlignment: CrossAxisAlignment.center,
         ),
       ),
     );

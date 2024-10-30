@@ -19,7 +19,7 @@ class _DownMenuState extends State<DownMenu> {
     final screens = [
       const HomeScreen(),
       const CreateTickets(),
-      TicketsViewList()
+      const TicketsViewList()
     ];
 
     // Lista de títulos correspondientes

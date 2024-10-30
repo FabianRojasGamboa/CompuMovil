@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:proyecto/screens/error_screen.dart';
 import 'package:proyecto/services/google_services.dart';
+import 'package:proyecto/services/rest_services.dart';
 import 'package:proyecto/widgets/Down_menu.dart';
 import 'package:proyecto/widgets/app_bar.dart';
 
@@ -19,15 +20,33 @@ class LoginScreen extends StatelessWidget {
             padding: const EdgeInsets.all(100),
             child: ElevatedButton(
                 onPressed: () {
-                  GoogleService.logIn().then((result) {
+                  GoogleService.logIn().then((result) async {
                     if (result) {
                       _logger.i("Me autentifique");
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const DownMenu()));
+
+                      // Llama al servicio después de autenticar
+                      try {
+                        await RestService.categories();
+                        await RestService.fetchAndSaveTypes();
+                        await RestService.fetchAndSaveStatuses();
+
+                        // Redirige al DownMenu después de guardar los datos
+                        Navigator.push(
+                            // ignore: use_build_context_synchronously
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const DownMenu()));
+                      } catch (e) {
+                        _logger.e("Error al consumir la API: $e");
+                        Navigator.push(
+                            // ignore: use_build_context_synchronously
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const ErrorScreen()));
+                      }
                     } else {
                       _logger.i("fui bueno");
+                      // ignore: use_build_context_synchronously
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
                         return const ErrorScreen();
