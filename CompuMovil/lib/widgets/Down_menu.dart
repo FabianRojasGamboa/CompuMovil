@@ -19,11 +19,11 @@ class _DownMenuState extends State<DownMenu> {
     final screens = [
       const HomeScreen(),
       const CreateTickets(),
-      const TicketsViewList()
+      TicketListScreen()
     ];
 
     // Lista de títulos correspondientes
-    final titulos = ['OIRS UTEM', 'Crear Tickets', 'Lista de Tickets'];
+    final titulos = ['OIRS UTEM', 'OIRS UTEM', 'Tickets'];
 
     return Scaffold(
       appBar: AppBar(

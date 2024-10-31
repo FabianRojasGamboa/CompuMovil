@@ -35,7 +35,7 @@ class LoginScreen extends StatelessWidget {
                             // ignore: use_build_context_synchronously
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const DownMenu()));
+                                builder: (context) => DownMenu()));
                       } catch (e) {
                         _logger.e("Error al consumir la API: $e");
                         Navigator.push(
