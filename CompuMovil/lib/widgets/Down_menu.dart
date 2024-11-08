@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:proyecto/screens/create_tickets.dart';
+import 'package:proyecto/screens/create_tickets_screen.dart';
 import 'package:proyecto/screens/home_screen.dart';
 import 'package:proyecto/screens/tickets_view_list.dart';
 
@@ -18,7 +18,7 @@ class _DownMenuState extends State<DownMenu> {
     // Lista de pantallas
     final screens = [
       const HomeScreen(),
-      const CreateTickets(),
+      const CreateTicketsScreen(),
       TicketListScreen()
     ];
 
