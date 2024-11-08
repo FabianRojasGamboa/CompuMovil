@@ -54,7 +54,6 @@ class _CreateTicketsState extends State<CreateTickets> {
       return;
     }
 
-    // Verificar el valor de _selectedType
     print("Selected type: $_selectedType");
 
     final url = '$_baseUrl/v1/icso/${_selectedCategory!.token}/ticket';
@@ -69,7 +68,7 @@ class _CreateTicketsState extends State<CreateTickets> {
           },
         ),
         data: {
-          'type': _selectedType, // Aquí envías el tipo
+          'type': _selectedType,
           'subject': _sujetoController.text,
           'message': _mensajeController.text,
         },
@@ -79,6 +78,14 @@ class _CreateTicketsState extends State<CreateTickets> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Ticket creado exitosamente')),
         );
+
+        // Limpiar los campos y restablecer las variables seleccionadas
+        setState(() {
+          _sujetoController.clear();
+          _mensajeController.clear();
+          _selectedCategory = null;
+          _selectedType = null;
+        });
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
