@@ -67,10 +67,11 @@ class _CreateTicketsState extends State<CreateTickets> {
                       "Sube un archivo complementario MAx 5MB.\n Tipos permitidos: JPEG, PNG, TXT, PDF "),
                 ),
                 const SizedBox(height: 50),
-                const Center(
+                Center(
                   child: CustomButton(
                     text: 'Crear Tickets',
                     icon: Icons.add, // Cambia el icono aquí
+                    onPressed: () {},
                   ),
                 ),
               ],

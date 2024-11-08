@@ -3,15 +3,19 @@ import 'package:flutter/material.dart';
 class CustomButton extends StatelessWidget {
   final String text; // Parámetro para el texto del botón
   final IconData icon; // Parámetro para el icono del botón
+  final VoidCallback onPressed; // Parámetro para la acción del botón
 
-  const CustomButton({super.key, required this.text, required this.icon});
+  const CustomButton({
+    Key? key,
+    required this.text,
+    required this.icon,
+    required this.onPressed,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {
-        // Acción del botón
-      },
+      onPressed: onPressed, // Usa el parámetro onPressed
       child: SizedBox(
         width: 150,
         child: Padding(

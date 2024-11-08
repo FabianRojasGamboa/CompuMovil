@@ -1,17 +1,17 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
-import 'package:proyecto/objets/categories.dart';
+import 'package:proyecto/objets/tickets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:proyecto/objets/categories.dart';
 
 class RestService {
   static final Dio _client = Dio();
   static final Logger _logger = Logger();
-
   static const String _mime = 'application/json';
   static const String _baseUrl = 'https://api.sebastian.cl/oirs-utem';
 
-  // Método que acepta un token para el ticket y obtiene las categorías
+  // Método para consumir el endpoint de categorías
   static Future<void> categories() async {
     _client.interceptors.add(LogInterceptor(
       request: true,
@@ -23,8 +23,6 @@ class RestService {
 
     SharedPreferences instance = await SharedPreferences.getInstance();
     final String idToken = instance.getString('idToken') ?? '';
-
-// Categories API //
 
     if (idToken.isNotEmpty) {
       const String url = "$_baseUrl/v1/info/categories";
@@ -71,9 +69,7 @@ class RestService {
     }
   }
 
-// Types API //
-
-  // Método para obtener y guardar los tipos en SharedPreferences
+  // Método para consumir el endpoint de tipos
   static Future<void> fetchAndSaveTypes() async {
     SharedPreferences instance = await SharedPreferences.getInstance();
     final String idToken = instance.getString('idToken') ?? '';
@@ -116,9 +112,7 @@ class RestService {
     return prefs.getStringList('types');
   }
 
-  // Status API//
-
-  // Método para obtener y guardar los estados en SharedPreferences
+  // Método para consumir el endpoint de estados
   static Future<void> fetchAndSaveStatuses() async {
     SharedPreferences instance = await SharedPreferences.getInstance();
     final String idToken = instance.getString('idToken') ?? '';
@@ -150,7 +144,7 @@ class RestService {
     }
   }
 
-// Método para guardar los estados en SharedPreferences
+  // Método para guardar los estados en SharedPreferences
   static Future<void> saveStatuses(List<String> statuses) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setStringList(
@@ -158,9 +152,78 @@ class RestService {
     _logger.i("Estados guardados en SharedPreferences: $statuses");
   }
 
-// Método para cargar los estados desde SharedPreferences
+  // Método para cargar los estados desde SharedPreferences
   static Future<List<String>?> loadStatusesFromPrefs() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getStringList('statuses'); // Carga con clave 'statuses'
+  }
+
+  // Método para consumir el endpoint de tickets
+  static Future<void> AllTickets() async {
+    _client.interceptors.add(LogInterceptor(
+      request: true,
+      requestHeader: true,
+      requestBody: true,
+      responseHeader: true,
+      responseBody: true,
+    ));
+
+    // Obtener SharedPreferences
+    SharedPreferences instance = await SharedPreferences.getInstance();
+    final String idToken = instance.getString('idToken') ?? '';
+
+    // Obtener la lista de categorías, tipos y estados desde SharedPreferences
+    List<Categories> categories = await loadCategories();
+    List<String>? types = await loadTypesFromPrefs();
+    List<String>? statuses = await loadStatusesFromPrefs();
+
+    // Verifica que hay al menos un valor en cada lista
+    if (categories.isNotEmpty && types != null && statuses != null) {
+      // Asignar valores de las listas a las variables
+      final String categoryToken = categories
+          .first.token; // Acceder solo al token de la primera categoría
+      final String type = types.isNotEmpty
+          ? types.first
+          : 'INFORMATION'; // Toma el primer tipo disponible, o usa 'INFORMATION' por defecto
+      final String status = statuses.isNotEmpty
+          ? statuses.first
+          : 'RECEIVED'; // Toma el primer estado disponible, o usa 'RECEIVED' por defecto
+
+      if (idToken.isNotEmpty) {
+        final String url = "$_baseUrl/v1/icso/$categoryToken/tickets";
+
+        Map<String, String> headers = {
+          'accept': _mime,
+          'Authorization': 'Bearer $idToken',
+        };
+
+        Response<String> response = await _client.get(url,
+            queryParameters: {
+              'categoryToken': categoryToken,
+              'type': type,
+              'status': status,
+            },
+            options: Options(headers: headers));
+
+        final int httpCode = response.statusCode ?? 400;
+
+        if (httpCode >= 200 && httpCode < 300) {
+          final String data = response.data ?? '';
+          List<Ticket> tickets = List<Ticket>.from(
+              json.decode(data).map((x) => Ticket.fromJson(x)));
+
+          // Imprimir los tickets obtenidos
+          for (var ticket in tickets) {
+            _logger.i("Ticket: ${ticket.toJson()}");
+          }
+        } else {
+          _logger.e("Error al obtener tickets: ${response.statusCode}");
+        }
+      } else {
+        _logger.e("No se encontró idToken");
+      }
+    } else {
+      _logger.e("No se encontraron datos en categorías, tipos o estados.");
+    }
   }
 }
