@@ -15,17 +15,14 @@ class GoogleService {
         GoogleSignInAuthentication auth = await account.authentication;
         String idToken = auth.idToken ?? '';
         String accessToken = auth.accessToken ?? '';
-        _logger.d('Token: $idToken');
-        _logger.d('Access: $idToken');
         ok = idToken.isNotEmpty && accessToken.isNotEmpty;
         if (ok) {
-          SharedPreferences.getInstance().then((current) {
-            current.setString('idToken', idToken);
-            current.setString('accessToken', accessToken);
-            current.setString('email', account.email);
-            current.setString('name', account.displayName ?? '');
-            current.setString('image', account.photoUrl ?? '');
-          });
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setString('idToken', idToken);
+          await prefs.setString('accessToken', accessToken);
+          await prefs.setString('email', account.email);
+          await prefs.setString('name', account.displayName ?? '');
+          await prefs.setString('image', account.photoUrl ?? '');
         }
       }
     } catch (error, stackTrace) {
@@ -34,5 +31,21 @@ class GoogleService {
       _logger.e(stackTrace.toString());
     }
     return ok;
+  }
+
+  static Future<void> logOut() async {
+    try {
+      // Cierra la sesión de Google
+      await _googleSignIn.signOut();
+
+      // Borra los datos de SharedPreferences
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.clear();
+
+      _logger.i("Usuario ha cerrado sesión");
+    } catch (error, stackTrace) {
+      _logger.e("Error cerrando sesión: $error");
+      _logger.e(stackTrace.toString());
+    }
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:proyecto/screens/create_tickets_screen.dart';
 import 'package:proyecto/screens/home_screen.dart';
 import 'package:proyecto/screens/tickets_view_list.dart';
+import 'package:proyecto/widgets/app_bar.dart';
 
 class DownMenu extends StatefulWidget {
   const DownMenu({super.key});
@@ -12,6 +13,30 @@ class DownMenu extends StatefulWidget {
 
 class _DownMenuState extends State<DownMenu> {
   int selectedIndex = 0;
+  PageController _pageController = PageController();
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      selectedIndex = index;
+    });
+    _pageController.animateToPage(
+      index,
+      duration: Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  void _onPageChanged(int index) {
+    setState(() {
+      selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,54 +44,38 @@ class _DownMenuState extends State<DownMenu> {
     final screens = [
       const HomeScreen(),
       const CreateTicketsScreen(),
-      TicketListScreen()
+      const TicketListScreen(),
     ];
 
-    // Lista de títulos correspondientes
-    final titulos = ['OIRS UTEM', 'OIRS UTEM', 'Tickets'];
-
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          titulos[selectedIndex],
-        ), // Cambia el título según el índice seleccionado
-        centerTitle: true,
-        backgroundColor: Colors.cyan,
-        titleTextStyle: const TextStyle(
-            color:
-                Colors.white), // Personaliza el color de la AppBar si lo deseas
-      ),
-      body: IndexedStack(
-        index: selectedIndex,
+      appBar: const BarraApp(titulo: "Oirs Utem"),
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: _onPageChanged,
         children: screens,
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.shifting,
         currentIndex: selectedIndex,
-        onTap: (value) {
-          setState(() {
-            selectedIndex = value;
-          });
-        },
-        items: [
+        onTap: _onItemTapped,
+        items: const [
           BottomNavigationBarItem(
-            icon: const Icon(Icons.home),
-            activeIcon: const Icon(Icons.home_filled),
+            icon: Icon(Icons.home),
+            activeIcon: Icon(Icons.home_filled),
             label: 'Inicio',
-            backgroundColor:
-                Colors.cyan[300], // Puedes ajustar los colores si es necesario
+            backgroundColor: Colors.white30,
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.message),
-            activeIcon: const Icon(Icons.message_rounded),
+            icon: Icon(Icons.message),
+            activeIcon: Icon(Icons.message_rounded),
             label: 'Crear Tickets',
-            backgroundColor: Colors.cyan[300],
+            backgroundColor: Colors.white30,
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.list),
-            activeIcon: const Icon(Icons.list_rounded),
+            icon: Icon(Icons.list),
+            activeIcon: Icon(Icons.list_rounded),
             label: 'Lista de Tickets',
-            backgroundColor: Colors.cyan[300],
+            backgroundColor: Colors.white30,
           ),
         ],
       ),

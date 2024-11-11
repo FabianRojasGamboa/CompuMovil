@@ -27,7 +27,7 @@ class _ListaDesplegableState extends State<ListaDesplegable> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          width: 320,
+          width: 335,
           padding: const EdgeInsets.symmetric(horizontal: 10),
           decoration: BoxDecoration(
             color: Colors.white,
