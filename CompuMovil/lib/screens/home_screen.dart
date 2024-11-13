@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:proyecto/screens/create_tickets_screen.dart';
-import 'package:proyecto/widgets/buttom.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {

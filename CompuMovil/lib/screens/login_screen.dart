@@ -30,22 +30,14 @@ class LoginScreen extends StatelessWidget {
               style: TextStyle(fontSize: 30),
             ),
             const SizedBox(height: 50),
-            Container(
-              width: 210,
-              height: 210,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white,
-              ),
-              child: ClipOval(
-                child: Container(
-                  width: 200,
-                  height: 200,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('lib/images/signoUtem.png'),
-                      fit: BoxFit.scaleDown,
-                    ),
+            ClipOval(
+              child: Container(
+                width: 200,
+                height: 200,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('lib/images/utem.png'),
+                    fit: BoxFit.scaleDown,
                   ),
                 ),
               ),
