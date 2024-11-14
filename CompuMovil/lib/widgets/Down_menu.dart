@@ -48,7 +48,7 @@ class _DownMenuState extends State<DownMenu> {
     ];
 
     return Scaffold(
-      appBar: const BarraApp(titulo: "Oirs Utem"),
+      appBar: const BarraApp(titulo: "Oirs Utem", showLeading: false),
       body: PageView(
         controller: _pageController,
         onPageChanged: _onPageChanged,

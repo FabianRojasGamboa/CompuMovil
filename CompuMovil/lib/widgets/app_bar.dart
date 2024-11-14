@@ -4,13 +4,19 @@ import 'package:proyecto/services/google_services.dart';
 
 class BarraApp extends StatelessWidget implements PreferredSizeWidget {
   final String titulo;
+  final bool showLeading;
 
-  const BarraApp({super.key, required this.titulo});
+  const BarraApp({
+    super.key,
+    required this.titulo,
+    this.showLeading = false, // Valor predeterminado en false
+  });
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      automaticallyImplyLeading: false,
+      automaticallyImplyLeading:
+          showLeading, // Controla automáticamente el botón de retroceso
       titleTextStyle: const TextStyle(
         color: Colors.black,
         fontSize: 22,
