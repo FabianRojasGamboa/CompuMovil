@@ -65,7 +65,6 @@ class LoginScreen extends StatelessWidget {
                           await RestService.categories();
                           await RestService.fetchAndSaveTypes();
                           await RestService.fetchAndSaveStatuses();
-                          await RestService.access();
 
                           Navigator.push(
                             context,

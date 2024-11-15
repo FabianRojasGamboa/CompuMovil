@@ -22,25 +22,19 @@ Future<List<Categories>> loadCategories() async {
   return [];
 }
 
-// Función para cargar tipos desde SharedPreferences
-Future<List<String>?> loadTypesFromPrefs() async {
+// Función para cargar tipos y estados desde SharedPreferences
+Future<List<String>?> loadPrefsList(String key) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  return prefs.getStringList('types');
-}
-
-// Función para cargar estados desde SharedPreferences
-Future<List<String>?> loadStatusesFromPrefs() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  return prefs.getStringList('statuses');
+  return prefs.getStringList(key);
 }
 
 // Función optimizada para obtener todos los tickets
-Future<List<Ticket>> AllTickets() async {
+Future<List<Ticket>> allTickets() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   final String idToken = prefs.getString('idToken') ?? '';
   List<Categories> categories = await loadCategories();
-  List<String>? types = await loadTypesFromPrefs();
-  List<String>? statuses = await loadStatusesFromPrefs();
+  List<String>? types = await loadPrefsList('types');
+  List<String>? statuses = await loadPrefsList('statuses');
 
   if (categories.isEmpty ||
       types == null ||
@@ -50,14 +44,9 @@ Future<List<Ticket>> AllTickets() async {
     return [];
   }
 
-  List<Future<List<Ticket>>> requests = [];
-  for (var category in categories) {
-    for (var type in types) {
-      for (var status in statuses) {
-        requests.add(_fetchTickets(category.token, type, status, idToken));
-      }
-    }
-  }
+  List<Future<List<Ticket>>> requests = categories.map((category) {
+    return _fetchTickets(category.token, types, statuses, idToken);
+  }).toList();
 
   try {
     List<List<Ticket>> results = await Future.wait(requests);
@@ -69,15 +58,16 @@ Future<List<Ticket>> AllTickets() async {
 }
 
 // Función auxiliar para realizar solicitudes de tickets
-Future<List<Ticket>> _fetchTickets(
-    String categoryToken, String type, String status, String idToken) async {
+Future<List<Ticket>> _fetchTickets(String categoryToken, List<String> types,
+    List<String> statuses, String idToken) async {
   try {
+    // Enviar una solicitud que incluya todos los types y statuses para la categoría
     Response<String> response = await _client.get(
       '/v1/icso/$categoryToken/tickets',
       queryParameters: {
-        'categoryToken': categoryToken,
-        'type': type,
-        'status': status
+        'type': types.join(','), // Enviar todos los tipos en un solo parámetro
+        'status':
+            statuses.join(','), // Enviar todos los estados en un solo parámetro
       },
       options: Options(
         headers: {'Authorization': 'Bearer $idToken'},
@@ -87,8 +77,7 @@ Future<List<Ticket>> _fetchTickets(
 
     final int httpCode = response.statusCode ?? 400;
     if (httpCode == 404) {
-      _logger.e(
-          "Endpoint no encontrado para categoryToken: $categoryToken, type: $type, status: $status");
+      _logger.e("Endpoint no encontrado para categoryToken: $categoryToken");
       return [];
     } else if (httpCode >= 200 && httpCode < 300) {
       final String data = response.data ?? '';
@@ -96,7 +85,7 @@ Future<List<Ticket>> _fetchTickets(
           json.decode(data).map((x) => Ticket.fromJson(x)));
     } else {
       _logger.e(
-          "Error en la solicitud para categoryToken: $categoryToken, type: $type, status: $status. Código HTTP: $httpCode");
+          "Error en la solicitud para categoryToken: $categoryToken. Código HTTP: $httpCode");
       return [];
     }
   } catch (e) {

@@ -42,9 +42,8 @@ class _DownMenuState extends State<DownMenu> {
   Widget build(BuildContext context) {
     // Lista de pantallas
     final screens = [
-      const HomeScreen(),
-      const CreateTicketsScreen(),
       const TicketListScreen(),
+      const CreateTicketsScreen(),
     ];
 
     return Scaffold(
@@ -59,12 +58,6 @@ class _DownMenuState extends State<DownMenu> {
         currentIndex: selectedIndex,
         onTap: _onItemTapped,
         items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            activeIcon: Icon(Icons.home_filled),
-            label: 'Inicio',
-            backgroundColor: Colors.white30,
-          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.message),
             activeIcon: Icon(Icons.message_rounded),

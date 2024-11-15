@@ -181,18 +181,27 @@ class _CreateTicketsState extends State<CreateTickets> {
                       FormUI(_sujetoController, "Sujeto", 80),
                       const SizedBox(height: 10),
                       FormUI(_mensajeController, "Mensaje", 160),
-                      const Center(
-                        child: Text(
-                          "Sube un archivo complementario Máx 5MB.\n Tipos permitidos: JPEG, PNG, TXT, PDF ",
-                        ),
-                      ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 10),
                       Center(
                         child: CustomButton(
                           text: 'Crear Tickets',
                           icon: Icons.add,
                           onPressed: _crearTicket,
                         ),
+                      ),
+                      const SizedBox(height: 20),
+                      const Center(
+                        child: Text(
+                          "Sube un archivo complementario Máx 5MB.\n Tipos permitidos: JPEG, PNG, TXT, PDF ",
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Center(
+                        child: CustomButton(
+                            text: "Subir Archivo adjunto",
+                            icon: Icons.attach_file,
+                            buttonSize: 220,
+                            onPressed: () {}),
                       ),
                     ],
                   ),

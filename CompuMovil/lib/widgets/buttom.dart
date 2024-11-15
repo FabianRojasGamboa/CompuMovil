@@ -4,12 +4,14 @@ class CustomButton extends StatelessWidget {
   final String text; // Parámetro para el texto del botón
   final IconData icon; // Parámetro para el icono del botón
   final VoidCallback onPressed; // Parámetro para la acción del botón
+  final double? buttonSize; // Parámetro para el tamaño del botón (opcional)
 
   const CustomButton({
     Key? key,
     required this.text,
     required this.icon,
     required this.onPressed,
+    this.buttonSize, // Se puede pasar un tamaño opcional
   }) : super(key: key);
 
   @override
@@ -17,7 +19,8 @@ class CustomButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed, // Usa el parámetro onPressed
       child: SizedBox(
-        width: 150,
+        width:
+            buttonSize ?? 150, // Si no se pasa el tamaño, usa 220 por defecto
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Row(
