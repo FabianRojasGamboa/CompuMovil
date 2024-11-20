@@ -28,13 +28,6 @@ class BarraApp extends StatelessWidget implements PreferredSizeWidget {
       shadowColor: Colors.grey.withOpacity(0.5),
       actions: <Widget>[
         IconButton(
-          icon: const Icon(Icons.search, color: Colors.blueGrey),
-          onPressed: () {
-            // Acción al presionar el botón de búsqueda
-          },
-          tooltip: 'Buscar',
-        ),
-        IconButton(
           icon: const Icon(Icons.logout, color: Colors.purple),
           onPressed: () async {
             bool? confirmLogout = await showDialog<bool>(

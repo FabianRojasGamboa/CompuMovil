@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:proyecto/services/upload_file.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:proyecto/objets/categories.dart';
 import 'package:proyecto/services/rest_services.dart';
@@ -24,6 +25,8 @@ class _CreateTicketsState extends State<CreateTickets> {
       _selectedCategory; // Variable para almacenar la categoría seleccionada
   String? _selectedType; // Variable para almacenar el tipo seleccionado
   final Dio _dio = Dio(); // Instancia de Dio para realizar la solicitud
+  String? _ticketToken; // Variable de estado para almacenar el ticketToken
+  bool _showUploadButton = false; // Control para mostrar botón de subida
 
   @override
   void initState() {
@@ -54,8 +57,6 @@ class _CreateTicketsState extends State<CreateTickets> {
       return;
     }
 
-    print("Selected type: $_selectedType");
-
     final url = '$_baseUrl/v1/icso/${_selectedCategory!.token}/ticket';
 
     try {
@@ -79,13 +80,19 @@ class _CreateTicketsState extends State<CreateTickets> {
           const SnackBar(content: Text('Ticket creado exitosamente')),
         );
 
-        // Limpiar los campos y restablecer las variables seleccionadas
-        setState(() {
-          _sujetoController.clear();
-          _mensajeController.clear();
-          _selectedCategory = null;
-          _selectedType = null;
-        });
+        final ticketData = response.data;
+        if (ticketData != null && ticketData['token'] != null) {
+          final ticketToken = ticketData['token'];
+          await prefs.setString('ticketToken', ticketToken);
+          print("Token del ticket guardado: $ticketToken");
+
+          setState(() {
+            _ticketToken = ticketToken;
+          });
+
+          _mostrarDialogoSubida(
+              ticketToken); // Muestra el diálogo para subir archivo
+        }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -96,7 +103,6 @@ class _CreateTicketsState extends State<CreateTickets> {
     } catch (e) {
       if (e is DioError && e.response != null) {
         print('Error: ${e.response!.data}');
-        print('Status Code: ${e.response!.statusCode}');
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error al crear ticket: ${e.response!.data}')),
         );
@@ -106,6 +112,57 @@ class _CreateTicketsState extends State<CreateTickets> {
         );
       }
     }
+  }
+
+  void _mostrarDialogoSubida(String ticketToken) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('¿Desea subir un archivo?'),
+        content: const Text(
+            'Puede subir un archivo complementario (Máx. 5 MB) para este ticket.'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              setState(() {
+                _showUploadButton = false; // No mostrar el botón de subida
+              });
+              _limpiarCampos(); // Limpiar los campos solo si se niega subir el archivo
+            },
+            child: const Text('No'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              setState(() {
+                _showUploadButton = true; // Mostrar el botón de subida
+              });
+            },
+            child: const Text('Sí'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _limpiarCampos() {
+    // Limpiar los campos solo si el usuario decide no subir el archivo
+    setState(() {
+      _sujetoController.clear();
+      _mensajeController.clear();
+      _selectedCategory = null;
+      _selectedType = null;
+      _ticketToken = null;
+    });
+  }
+
+  Future<void> _subirArchivoExitosamente() async {
+    // Lógica para subir el archivo exitosamente
+    // Esto es un marcador de lugar y deberías reemplazarlo con tu código real de subida
+    setState(() {
+      _limpiarCampos(); // Limpiar campos después de subir el archivo exitosamente
+    });
   }
 
   @override
@@ -180,7 +237,7 @@ class _CreateTicketsState extends State<CreateTickets> {
                       const SizedBox(height: 20),
                       FormUI(_sujetoController, "Sujeto", 80),
                       const SizedBox(height: 10),
-                      FormUI(_mensajeController, "Mensaje", 160),
+                      FormUI(_mensajeController, "Mensaje", 120),
                       const SizedBox(height: 10),
                       Center(
                         child: CustomButton(
@@ -190,19 +247,14 @@ class _CreateTicketsState extends State<CreateTickets> {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      const Center(
-                        child: Text(
-                          "Sube un archivo complementario Máx 5MB.\n Tipos permitidos: JPEG, PNG, TXT, PDF ",
+                      if (_showUploadButton && _ticketToken != null)
+                        Center(
+                          child: UploadFile(
+                            ticketToken: _ticketToken!,
+                            onFileUploaded:
+                                _subirArchivoExitosamente, // Callback después de subir el archivo
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 10),
-                      Center(
-                        child: CustomButton(
-                            text: "Subir Archivo adjunto",
-                            icon: Icons.attach_file,
-                            buttonSize: 220,
-                            onPressed: () {}),
-                      ),
                     ],
                   ),
                 );
