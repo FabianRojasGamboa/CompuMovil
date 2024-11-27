@@ -46,35 +46,18 @@ class _TicketListScreenState extends State<TicketListScreen> {
     }
   }
 
-  void _confirmDeleteTicket(Ticket ticket) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Confirmar eliminación"),
-          content:
-              const Text("¿Estás seguro de que deseas eliminar este ticket?"),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text("Cancelar"),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                _deleteTicket(ticket);
-              },
-              child: const Text(
-                "Eliminar",
-                style: TextStyle(color: Colors.purple),
-              ),
-            ),
-          ],
-        );
-      },
-    );
+  // Función para obtener el color de fondo según el tipo de ticket
+  Color _getTicketColor(String ticketType) {
+    switch (ticketType.toLowerCase()) {
+      case 'claim':
+        return Colors.redAccent.shade100;
+      case 'suggestion':
+        return Colors.greenAccent.shade100;
+      case 'information':
+        return Colors.blueAccent.shade100;
+      default:
+        return Colors.grey.shade200; // Color de fondo por defecto
+    }
   }
 
   @override
@@ -85,7 +68,7 @@ class _TicketListScreenState extends State<TicketListScreen> {
         const Padding(
           padding: EdgeInsets.all(16.0),
           child: Text(
-            'Mis Tickets', // Título
+            'Mis Tickets',
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.w500,
@@ -129,12 +112,18 @@ class _TicketListScreenState extends State<TicketListScreen> {
                             child: Container(
                               padding: const EdgeInsets.all(15),
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: _getTicketColor(ticket.type), // Fondo
+                                border: Border.all(
+                                  color: const Color.fromARGB(
+                                      255, 85, 85, 85), // Borde negro
+                                  width: 1.5, // Grosor del borde
+                                ),
+                                borderRadius: BorderRadius.circular(20),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withOpacity(0.5),
-                                    spreadRadius: 5,
-                                    blurRadius: 8,
+                                    color: Colors.black.withOpacity(0.2),
+                                    spreadRadius: 2,
+                                    blurRadius: 5,
                                     offset: const Offset(0, 3),
                                   ),
                                 ],

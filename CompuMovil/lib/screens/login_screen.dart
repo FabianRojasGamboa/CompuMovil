@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
-import 'package:proyecto/screens/error_screen.dart';
 import 'package:proyecto/services/google_services.dart';
 import 'package:proyecto/services/rest_services.dart';
 import 'package:proyecto/widgets/Down_menu.dart';
-import 'package:shared_preferences/shared_preferences.dart'; // Importación de SharedPreferences
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatelessWidget {
   static final Logger _logger = Logger();
@@ -66,6 +65,7 @@ class LoginScreen extends StatelessWidget {
                           await RestService.fetchAndSaveTypes();
                           await RestService.fetchAndSaveStatuses();
 
+                          // Navega a la pantalla DownMenu
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -73,18 +73,50 @@ class LoginScreen extends StatelessWidget {
                           );
                         } catch (e) {
                           _logger.e("Error al consumir la API: $e");
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const ErrorScreen()),
+
+                          // Muestra el cuadro de diálogo de error por conexión
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text("Error de Conexión"),
+                                content: const Text(
+                                    "Por favor, comprueba tu conexión a internet."),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pop(); // Cierra el cuadro de diálogo
+                                    },
+                                    child: const Text("Aceptar"),
+                                  ),
+                                ],
+                              );
+                            },
                           );
                         }
                       } else {
                         _logger.i("Error de autenticación");
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const ErrorScreen()),
+
+                        // Muestra el cuadro de diálogo por error de autenticación
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text("Error de Autenticación"),
+                              content: const Text(
+                                  "Por favor, comprueba tu conexión a internet."),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context)
+                                        .pop(); // Cierra el cuadro de diálogo
+                                  },
+                                  child: const Text("Aceptar"),
+                                ),
+                              ],
+                            );
+                          },
                         );
                       }
                     });

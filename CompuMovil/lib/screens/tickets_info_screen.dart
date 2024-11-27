@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:proyecto/objets/tickets.dart';
 import 'package:proyecto/services/info_tickets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -153,14 +154,6 @@ class _TicketsInfoScreenState extends State<TicketsInfoScreen> {
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            "Token del ticket: ${widget.ticketToken}",
-                            style: const TextStyle(
-                              fontSize: 16,
-                              color: Colors.black87,
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
                             "Tipo: ${_ticket!.type}",
                             style: const TextStyle(
                               fontSize: 16,
@@ -201,7 +194,7 @@ class _TicketsInfoScreenState extends State<TicketsInfoScreen> {
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            "Creado el: ${_ticket!.created}",
+                            "Creado el: ${DateFormat('yyyy-MM-dd HH:mm').format(_ticket!.created)}",
                             style: const TextStyle(
                               fontSize: 16,
                               color: Colors.black87,
@@ -209,7 +202,7 @@ class _TicketsInfoScreenState extends State<TicketsInfoScreen> {
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            "Última actualización: ${_ticket!.updated}",
+                            "Última actualización: ${DateFormat('yyyy-MM-dd HH:mm').format(_ticket!.created)}",
                             style: const TextStyle(
                               fontSize: 16,
                               color: Colors.black87,

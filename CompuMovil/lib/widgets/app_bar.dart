@@ -21,14 +21,14 @@ class BarraApp extends StatelessWidget implements PreferredSizeWidget {
         color: Colors.black,
         fontSize: 22,
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.purple[100],
       title: Text(titulo),
       centerTitle: true,
       elevation: 5,
-      shadowColor: Colors.grey.withOpacity(0.5),
+      shadowColor: const Color.fromARGB(255, 75, 75, 75).withOpacity(0.9),
       actions: <Widget>[
         IconButton(
-          icon: const Icon(Icons.logout, color: Colors.purple),
+          icon: const Icon(Icons.logout, color: Colors.black),
           onPressed: () async {
             bool? confirmLogout = await showDialog<bool>(
               context: context,
