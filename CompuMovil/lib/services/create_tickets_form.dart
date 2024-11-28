@@ -165,6 +165,12 @@ class _CreateTicketsState extends State<CreateTickets> {
     });
   }
 
+  final Map<String, String> typeTranslations = {
+    "CLAIM": "Reclamo",
+    "SUGGESTION": "Sugerencia",
+    "INFORMATION": "Información",
+  };
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Categories>>(
@@ -226,22 +232,32 @@ class _CreateTicketsState extends State<CreateTickets> {
                       const SizedBox(height: 10),
                       Center(
                         child: ListaDesplegable(
-                          opciones: types,
-                          onChanged: (selectedType) {
+                          opciones: types
+                              .map((type) => typeTranslations[type] ?? type)
+                              .toList(),
+                          onChanged: (selectedTypeInSpanish) {
                             setState(() {
-                              _selectedType = selectedType;
+                              // Encuentra el valor original de la API a partir de la traducción seleccionada
+                              _selectedType = typeTranslations.entries
+                                  .firstWhere(
+                                      (entry) =>
+                                          entry.value == selectedTypeInSpanish,
+                                      orElse: () => MapEntry(
+                                          selectedTypeInSpanish,
+                                          selectedTypeInSpanish))
+                                  .key;
                             });
                           },
                         ),
                       ),
                       const SizedBox(height: 20),
-                      FormUI(_sujetoController, "Sujeto", 80),
+                      FormUI(_sujetoController, "Asunto del ticket", 80),
                       const SizedBox(height: 10),
-                      FormUI(_mensajeController, "Mensaje", 120),
+                      FormUI(_mensajeController, "Mensaje", 160),
                       const SizedBox(height: 10),
                       Center(
                         child: CustomButton(
-                          text: 'Crear Tickets',
+                          text: 'Registrar Ticket',
                           icon: Icons.add,
                           onPressed: _crearTicket,
                         ),

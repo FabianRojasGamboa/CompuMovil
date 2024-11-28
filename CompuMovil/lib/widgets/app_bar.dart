@@ -28,7 +28,12 @@ class BarraApp extends StatelessWidget implements PreferredSizeWidget {
       shadowColor: const Color.fromARGB(255, 75, 75, 75).withOpacity(0.9),
       actions: <Widget>[
         IconButton(
-          icon: const Icon(Icons.logout, color: Colors.black),
+          icon: const Icon(
+            Icons.logout,
+            color: Colors.black,
+            size: 30,
+            semanticLabel: "Cerrar Sesión", // Tamaño del ícono ajustado
+          ),
           onPressed: () async {
             bool? confirmLogout = await showDialog<bool>(
               context: context,
@@ -52,7 +57,7 @@ class BarraApp extends StatelessWidget implements PreferredSizeWidget {
                         Navigator.of(context).pop(false);
                       },
                       style: TextButton.styleFrom(
-                        foregroundColor: Colors.grey,
+                        foregroundColor: Colors.black,
                       ),
                       child: const Text('Cancelar'),
                     ),
@@ -66,7 +71,10 @@ class BarraApp extends StatelessWidget implements PreferredSizeWidget {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      child: const Text('Confirmar'),
+                      child: const Text(
+                        'Confirmar',
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   ],
                 );

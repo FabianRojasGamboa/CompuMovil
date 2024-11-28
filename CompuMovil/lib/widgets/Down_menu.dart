@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto/screens/create_tickets_screen.dart';
-import 'package:proyecto/screens/home_screen.dart';
 import 'package:proyecto/screens/tickets_view_list.dart';
 import 'package:proyecto/widgets/app_bar.dart';
 
@@ -61,13 +60,13 @@ class _DownMenuState extends State<DownMenu> {
           BottomNavigationBarItem(
             icon: Icon(Icons.message),
             activeIcon: Icon(Icons.message_rounded),
-            label: 'Crear Tickets',
+            label: 'Lista de Tickets',
             backgroundColor: Color.fromARGB(255, 128, 53, 141),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.list),
             activeIcon: Icon(Icons.list_rounded),
-            label: 'Lista de Tickets',
+            label: 'Crear Tickets',
             backgroundColor: Color.fromARGB(255, 128, 53, 141),
           ),
         ],

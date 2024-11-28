@@ -41,12 +41,12 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 70),
+            const SizedBox(height: 100),
             const Text(
-              "Ingresar con la cuenta Utem",
+              "Inicia sesión con tu cuenta UTEM a través de Google",
               style: TextStyle(fontSize: 15),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 10),
             Center(
               child: Padding(
                 padding: const EdgeInsets.all(10),

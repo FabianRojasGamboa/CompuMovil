@@ -23,6 +23,19 @@ class _TicketsInfoScreenState extends State<TicketsInfoScreen> {
   Ticket? _ticket;
   bool _isLoading = true;
 
+  // Mapa de traducción para los estados
+  final Map<String, String> statusTranslations = {
+    "ERROR": "Error",
+    "RECEIVED": "Recibido",
+    "UNDER_REVIEW": "En revisión",
+    "IN_PROGRESS": "En progreso",
+    "PENDING_INFORMATION": "Pendiente de información",
+    "RESOLVED": "Resuelto",
+    "CLOSED": "Cerrado",
+    "REJECTED": "Rechazado",
+    "CANCELLED": "Cancelado",
+  };
+
   @override
   void initState() {
     super.initState();
@@ -91,16 +104,20 @@ class _TicketsInfoScreenState extends State<TicketsInfoScreen> {
               onPressed: () {
                 Navigator.of(context).pop(false); // Cancela la eliminación
               },
-              child: const Text('Cancelar'),
+              child:
+                  const Text('Cancelar', style: TextStyle(color: Colors.black)),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop(true); // Confirma la eliminación
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
+                backgroundColor: Colors.purple,
               ),
-              child: const Text('Eliminar'),
+              child: const Text(
+                'Eliminar',
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ],
         );
@@ -115,6 +132,10 @@ class _TicketsInfoScreenState extends State<TicketsInfoScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Traducir el estado usando el mapa
+    String translatedStatus =
+        statusTranslations[_ticket?.status] ?? _ticket?.status ?? '';
+
     return Scaffold(
       appBar: const BarraApp(titulo: "Ticket", showLeading: true),
       body: Padding(
@@ -186,7 +207,7 @@ class _TicketsInfoScreenState extends State<TicketsInfoScreen> {
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            "Estado: ${_ticket!.status}",
+                            "Estado: $translatedStatus", // Estado traducido
                             style: const TextStyle(
                               fontSize: 16,
                               color: Colors.black87,

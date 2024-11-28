@@ -20,7 +20,7 @@ class CustomButton extends StatelessWidget {
       onPressed: onPressed, // Usa el parámetro onPressed
       child: SizedBox(
         width:
-            buttonSize ?? 150, // Si no se pasa el tamaño, usa 220 por defecto
+            buttonSize ?? 180, // Si no se pasa el tamaño, usa 220 por defecto
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Row(
