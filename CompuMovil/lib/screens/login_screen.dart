@@ -73,7 +73,7 @@ class LoginScreen extends StatelessWidget {
                           );
                         } catch (e) {
                           _logger.e("Error al consumir la API: $e");
-
+                          await GoogleService.logOut();
                           // Muestra el cuadro de diálogo de error por conexión
                           showDialog(
                             context: context,
